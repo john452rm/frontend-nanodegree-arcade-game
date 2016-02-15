@@ -10,7 +10,7 @@ var Enemy = function() {
 
     this.sprite = 'images/enemy-bug.png';
     this.x = -200;
-    this.row = Math.round((Math.random()*3)+0.5);
+    this.row = randomInt(3);
     this.yOffset = -23
     this.y = 0;
     this.updateY();
@@ -36,7 +36,7 @@ Enemy.prototype.update = function(dt) {
 
     if (this.x > 500 + (Math.random()*200)) {
         this.x = -100;
-        this.row = Math.round((Math.random()*3)+0.5);
+        this.row = randomInt(3);
         this.updateY();
         this.setSpeed();
     };     
@@ -65,6 +65,10 @@ Enemy.prototype.checkCollision = function () {
             player.collision = 1;
         };
     };
+};
+
+var randomInt = function (howMany) {
+    return Math.round((Math.random()*howMany)+0.5);
 };
 
 
@@ -137,6 +141,31 @@ Player.prototype.handleInput = function(allowedKeys) {
     };
 };
 
+var Collectible = function () {
+    this.gemList = ['Gem Blue.png', 'Gem Green.png', 'Gem Orange.png', 'Heart.png', 'Star.png'];
+    this.gemType = randomInt(5)-1;
+    this.sprite = 'images/'+this.gemList[this.gemType];
+    console.log(this.sprite);
+    this.yOffset= -33;
+    this.row = randomInt(3);
+    this.column = randomInt(5)-1;
+    console.log(this.column);
+    this.y = (this.row * 83) + this.yOffset;
+    this.x = (this.column * 101);
+};
+
+Collectible.prototype.render = function() {
+//    ctx.scale(0.5, 0.5);
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y); //TODO: change sprite size
+//    ctx.scale(1,1);
+};
+
+Collectible.prototype.update = function () {
+    // checkCollision
+};
+
+// TODO: collectible reset function
+
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 
@@ -147,6 +176,8 @@ Enemy.launch(allEnemies, 5);
 // Place the player object in a variable called player
 
 var player = new Player;
+
+var collectible = new Collectible;
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
