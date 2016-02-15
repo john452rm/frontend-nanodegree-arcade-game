@@ -6,11 +6,14 @@ var Enemy = function() {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
-    this.x = -83;
+    this.x = -200;
     this.row = Math.round((Math.random()*3)+0.5);
     this.yOffset = -23
-    this.y = (this.row*83) + this.yOffset;
-    this.speed = 250 * (Math.random()+0.3);
+    this.y = 0;
+    this.updateY();
+    this.setSpeed();
+    console.log(this.speed);
+
 };
 
 // Update the enemy's position, required method for game
@@ -24,9 +27,14 @@ Enemy.prototype.update = function(dt) {
         this.x = -83;
         this.row = Math.round((Math.random()*3)+0.5);
         this.updateY();
-        this.speed = 250 * (Math.random()+0.3);
-    };
+        this.setSpeed();
+    };     
+    this.checkCollision();
 };
+
+Enemy.prototype.setSpeed = function () {
+        this.speed = 350 * (Math.random()+0.3);
+}
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
@@ -35,6 +43,15 @@ Enemy.prototype.render = function() {
 
 Enemy.prototype.updateY = function () {
     this.y = (this.row*83) + this.yOffset;
+};
+
+Enemy.prototype.checkCollision = function () {
+    if (this.row === player.row) {
+        playerOffset = this.x - player.x;
+        if ((playerOffset < 50) && (playerOffset > -70 )) {
+            player.reset();
+        };
+    };
 };
 
 
@@ -48,13 +65,22 @@ var Player = function () {
     this.x = 202;
     this.row = 5;
     this.yOffset = -35;
+    this.y = 0;
     this.updateY();
 };
 
-Player.prototype.update = function(dt) {};
+Player.prototype.update = function(dt) {
+};
 
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
+
+Player.prototype.reset = function () {
+    this.row = 5;
+    this.x = 202;
+    this.updateY();
+    // TODO: add code for number of lives remaining
 };
 
 Player.prototype.updateY = function () {
@@ -74,14 +100,14 @@ Player.prototype.handleInput = function(allowedKeys) {
             };
             break;
         case 'up':
-            if (this.row > 2) { // Does not allow player to win as no win routine yet
-                this.row = this.row - 1;
+            if (this.row > 1) { // Does not allow player to win as no win routine yet
+                this.row--;
                 this.updateY();
             };
             break;
         case 'down':
-            if (this.row < 4) {
-                this.row = this.row + 1;
+            if (this.row < 5) {
+                this.row++;
                 this.updateY();
             };
             break;
@@ -105,8 +131,6 @@ launch(allEnemies, 5);
 // Place the player object in a variable called player
 
 var player = new Player;
-
-
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
