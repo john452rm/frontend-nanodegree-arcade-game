@@ -7,8 +7,9 @@ var Enemy = function() {
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
     this.x = -83;
-    this.row = Math.round((Math.random()*3)-0.5);
-    this.y = 60 + (this.row*83);
+    this.row = Math.round((Math.random()*3)+0.5);
+    this.yOffset = -23
+    this.y = (this.row*83) + this.yOffset;
     this.speed = 250 * (Math.random()+0.3);
 };
 
@@ -21,8 +22,8 @@ Enemy.prototype.update = function(dt) {
     // all computers.
     if (this.x > 500 + (Math.random()*200)) {
         this.x = -83;
-        this.row = Math.round((Math.random()*3)-0.5);
-        this.y = 60 + (this.row*83);
+        this.row = Math.round((Math.random()*3)+0.5);
+        this.updateY();
         this.speed = 250 * (Math.random()+0.3);
     };
 };
@@ -32,23 +33,32 @@ Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+Enemy.prototype.updateY = function () {
+    this.y = (this.row*83) + this.yOffset;
+};
+
 
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
 
 
-
 var Player = function () {
     this.sprite = 'images/char-boy.png';
     this.x = 202;
-    this.y = 380;
+    this.row = 5;
+    this.yOffset = -35;
+    this.updateY();
 };
 
 Player.prototype.update = function(dt) {};
 
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
+
+Player.prototype.updateY = function () {
+    this.y = (this.row*83) + this.yOffset;
 };
 
 Player.prototype.handleInput = function(allowedKeys) {
@@ -64,13 +74,15 @@ Player.prototype.handleInput = function(allowedKeys) {
             };
             break;
         case 'up':
-            if (this.y > 130) { // Does not allow player to win as no win routine yet
-                this.y = this.y - 83;
+            if (this.row > 2) { // Does not allow player to win as no win routine yet
+                this.row = this.row - 1;
+                this.updateY();
             };
             break;
         case 'down':
-            if (this.y < 298) {
-                this.y = this.y + 83;
+            if (this.row < 4) {
+                this.row = this.row + 1;
+                this.updateY();
             };
             break;
     };
