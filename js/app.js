@@ -79,19 +79,16 @@ var randomInt = function (howMany) {
 
 var Player = function () {
     this.sprite = 'images/char-boy.png';
-    this.x = 202;
-    this.row = 5;
     this.yOffset = -35;
-    this.y = 0;
-    this.collision = 0;
-    this.updateY();
+    this.reset();
+    
 };
 
 Player.prototype.update = function(dt) { // Why did the sample code include dt as parameter?
-    this.updateY();
-    if (player.collision) {
-        player.reset();
-        player.collision = 0;
+    this.updateLoc();
+    if (this.collision) {
+        this.reset();
+        this.collision = 0;
     };
 };
 
@@ -104,28 +101,33 @@ Player.prototype.render = function() {
 
 Player.prototype.reset = function () {
     this.row = 5;
-    this.x = 202;
-    player.collision = 0;
-    this.updateY();
+    this.column = 2;
+    this.collision = 0;
+    this.updateLoc();
     // TODO: add code for number of lives remaining
 };
 
-Player.prototype.updateY = function () {
+Player.prototype.updateLoc = function () {
     this.y = (this.row*83) + this.yOffset;
+    this.x = (this.column * 101);
 };
+
+Player.prototype.gotGem = function(gemType) {
+    // TODO: increment score
+}
 
 // Update player x-position and row based on key inputs:
 
 Player.prototype.handleInput = function(allowedKeys) {
     switch(allowedKeys) {
         case 'left':
-            if (this.x > 100) {
-                this.x = this.x - 101;
+            if (this.column > 0) {
+                this.column--;
             };
             break;
         case 'right':
-            if (this.x < 304) {
-                this.x = this.x + 101;
+            if (this.column < 4) {
+                this.column++;
             };
             break;
         case 'up':
@@ -142,29 +144,39 @@ Player.prototype.handleInput = function(allowedKeys) {
 };
 
 var Collectible = function () {
-    this.gemList = ['Gem Blue.png', 'Gem Green.png', 'Gem Orange.png', 'Heart.png', 'Star.png'];
-    this.gemType = randomInt(5)-1;
-    this.sprite = 'images/'+this.gemList[this.gemType];
-    console.log(this.sprite);
     this.yOffset= -33;
-    this.row = randomInt(3);
-    this.column = randomInt(5)-1;
-    console.log(this.column);
-    this.y = (this.row * 83) + this.yOffset;
-    this.x = (this.column * 101);
+    this.gemList = ['Gem Blue.png', 'Gem Green.png', 'Gem Orange.png', 'Heart.png', 'Star.png'];
+    this.reset();
 };
 
+Collectible.prototype.reset = function () {
+    this.gemType = randomInt(5)-1;
+    this.sprite = 'images/'+this.gemList[this.gemType];
+    this.row = randomInt(3);
+    this.column = randomInt(5)-1;
+    this.y = (this.row * 83) + this.yOffset;
+    this.x = (this.column * 101);
+}
+
 Collectible.prototype.render = function() {
+//    ctx.save();
 //    ctx.scale(0.5, 0.5);
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y); //TODO: change sprite size
 //    ctx.scale(1,1);
+//    ctx.restore();
 };
 
 Collectible.prototype.update = function () {
-    // checkCollision
+    this.checkCollision ();
 };
 
-// TODO: collectible reset function
+Collectible.prototype.checkCollision = function () {
+    if ((this.row === player.row) && (this.column === player.column)) {    
+            player.gotGem(this.gemType);
+            this.reset();
+    };
+};
+
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
