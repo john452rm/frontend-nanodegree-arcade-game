@@ -88,7 +88,6 @@ Player.prototype.update = function(dt) { // Why did the sample code include dt a
     this.updateLoc();
     if (this.collision) {
         this.reset();
-        this.collision = 0;
     };
 };
 
