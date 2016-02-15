@@ -28,6 +28,7 @@ Enemy.launch = function(allEnemies, number) {
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
     this.x = this.x + (this.speed * dt);
+
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
@@ -80,23 +81,10 @@ var randomInt = function (howMany) {
 var Player = function () {
     this.sprite = 'images/char-boy.png';
     this.yOffset = -35;
+    this.score = 0
     this.reset();
     
 };
-
-Player.prototype.update = function(dt) { // Why does the sample code include dt as parameter?
-    this.updateLoc();
-    if (this.collision) {
-        this.reset();
-    };
-};
-
-
-Player.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-};
-
-// Return player to start and unflag collision:
 
 Player.prototype.reset = function () {
     this.row = 5;
@@ -106,13 +94,34 @@ Player.prototype.reset = function () {
     // TODO: add code for number of lives remaining
 };
 
+Player.prototype.update = function(dt) { // Why does the sample code include dt as parameter?
+    if (this.row === 0) {
+        this.atWater();
+        this.reset();
+    };
+    this.updateLoc();
+    if (this.collision) {
+        this.reset();
+    };
+};
+
+Player.prototype.atWater = function () {
+    this.score = this.score + 100
+};
+
+Player.prototype.render = function() {
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
+
+// Return player to start and unflag collision:
+
 Player.prototype.updateLoc = function () {
     this.y = (this.row*83) + this.yOffset;
     this.x = (this.column * 101);
 };
 
 Player.prototype.gotGem = function(gemType) {
-    // TODO: increment score
+    this.score = this.score + (gemType * 20);
 }
 
 // Update player row and column based on key press:
@@ -130,7 +139,7 @@ Player.prototype.handleInput = function(allowedKeys) {
             };
             break;
         case 'up':
-            if (this.row > 1) { // Does not allow player to win as no win routine yet
+            if (this.row > 0) { 
                 this.row--;
             };
             break;
