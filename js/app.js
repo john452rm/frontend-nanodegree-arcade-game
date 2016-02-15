@@ -17,6 +17,13 @@ var Enemy = function() {
     this.setSpeed();
 };
 
+Enemy.launch = function(allEnemies, number) {
+    var i;
+    for (i = 0; i < number; i++) {
+        allEnemies[i] = new this;
+    };
+};
+
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
@@ -135,14 +142,7 @@ Player.prototype.handleInput = function(allowedKeys) {
 
 var allEnemies = [];
 
-launch = function(allEnemies, number) {
-    var i;
-    for (i = 0; i < number; i++) {
-        allEnemies[i] = new Enemy;
-    };
-};
-
-launch(allEnemies, 5);
+Enemy.launch(allEnemies, 5);
 
 // Place the player object in a variable called player
 
