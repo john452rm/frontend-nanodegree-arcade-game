@@ -143,13 +143,18 @@ Player.prototype.handleInput = function(allowedKeys) {
 };
 
 var Collectible = function () {
-    this.yOffset= -33;
     this.gemList = ['Gem Blue.png', 'Gem Green.png', 'Gem Orange.png', 'Heart.png', 'Star.png'];
     this.reset();
 };
 
 Collectible.prototype.reset = function () {
     this.gemType = randomInt(5)-1;
+    if (this.gemType<3) {
+        this.yOffset= -33;
+    } else {
+        this.yOffset=-10;
+    };
+    
     this.sprite = 'images/'+this.gemList[this.gemType];
     this.row = randomInt(3);
     this.column = randomInt(5)-1;
