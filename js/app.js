@@ -84,7 +84,7 @@ var Player = function () {
     
 };
 
-Player.prototype.update = function(dt) { // Why did the sample code include dt as parameter?
+Player.prototype.update = function(dt) { // Why does the sample code include dt as parameter?
     this.updateLoc();
     if (this.collision) {
         this.reset();
@@ -115,7 +115,7 @@ Player.prototype.gotGem = function(gemType) {
     // TODO: increment score
 }
 
-// Update player x-position and row based on key inputs:
+// Update player row and column based on key press:
 
 Player.prototype.handleInput = function(allowedKeys) {
     switch(allowedKeys) {
@@ -147,6 +147,8 @@ var Collectible = function () {
     this.reset();
 };
 
+// Set gem type and position
+
 Collectible.prototype.reset = function () {
     this.gemType = randomInt(5)-1;
     if (this.gemType<3) {
@@ -163,16 +165,14 @@ Collectible.prototype.reset = function () {
 }
 
 Collectible.prototype.render = function() {
-//    ctx.save();
-//    ctx.scale(0.5, 0.5);
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y); //TODO: change sprite size
-//    ctx.scale(1,1);
-//    ctx.restore();
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y); 
 };
 
 Collectible.prototype.update = function () {
     this.checkCollision ();
 };
+
+// Check for collision with player
 
 Collectible.prototype.checkCollision = function () {
     if ((this.row === player.row) && (this.column === player.column)) {    
