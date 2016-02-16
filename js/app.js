@@ -9,12 +9,8 @@ var Enemy = function() {
     // Set initial position and speed:
 
     this.sprite = 'images/enemy-bug.png';
-    this.x = -200;
-    this.row = randomInt(3);
     this.yOffset = -23
-    this.y = 0;
-    this.updateY();
-    this.setSpeed();
+    this.init();
 };
 
 Enemy.launch = function(allEnemies, number) {
@@ -22,6 +18,13 @@ Enemy.launch = function(allEnemies, number) {
     for (i = 0; i < number; i++) {
         allEnemies[i] = new this;
     };
+};
+
+Enemy.prototype.init = function () {
+    this.x = -150;
+    this.row = randomInt(3);
+    this.updateY();
+    this.setSpeed();
 };
 
 // Update the enemy's position, required method for game
@@ -36,10 +39,7 @@ Enemy.prototype.update = function(dt) {
     // After a random distance past right edge, change enemy row and restart from left:
 
     if (this.x > 500 + (Math.random()*200)) {
-        this.x = -100;
-        this.row = randomInt(3);
-        this.updateY();
-        this.setSpeed();
+        this.init();
     };     
     this.checkCollision();
 };
@@ -111,6 +111,8 @@ Player.prototype.atWater = function () {
 
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    ctx.font = "Bold 30px Georgia";
+    ctx.fillText('Score: '+this.score.toString(), 20, 100);
 };
 
 // Return player to start and unflag collision:
@@ -160,6 +162,8 @@ var Collectible = function () {
 
 Collectible.prototype.reset = function () {
     this.gemType = randomInt(5)-1;
+    
+    // Set y adjustment based on collectible type
     if (this.gemType<3) {
         this.yOffset= -33;
     } else {
@@ -167,6 +171,9 @@ Collectible.prototype.reset = function () {
     };
     
     this.sprite = 'images/'+this.gemList[this.gemType];
+
+    // Set collectible position
+    
     this.row = randomInt(3);
     this.column = randomInt(5)-1;
     this.y = (this.row * 83) + this.yOffset;
