@@ -1,6 +1,29 @@
-frontend-nanodegree-arcade-game
-===============================
+# frontend-nanodegree-arcade-game
 
-Students should use this [rubric](https://www.udacity.com/course/viewer/#!/c-nd001/l-2696458597/m-2687128535) for self-checking their submission.
+This is a simple game based on the old game of Frogger.
 
-For detailed instructions on how to get started, check out this [guide](https://docs.google.com/document/d/1v01aScPjSWCCWQLIpFqvg3-vXLH2e8_SZQKC8jNO0Dc/pub?embedded=true).
+## Installation
+
+1. Clone the [GitHub](https://github.com) respository
+
+```
+    git clone https://github.com/john452rm/frontend-nanodegree-arcade-game.git
+```
+
+2. Navigate to the file `index.html` where you have cloned it and open it in a broswer window.
+
+## Dependencies
+
+You will need to have [installed Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) in order to clone the GitHub repository.
+
+## Playing the Game
+
+Your player character starts at the bottom of the screen. You must get to the water at the top, avoiding the enemy bugs and collecting treasures on the way. Use the arrow keys to move.
+
+# Known issues
+
+The game currently does not implement a finite number of player lives.
+
+## License
+
+All rights are reserved while I investigate the licensing position of the code provided by Udacity.
